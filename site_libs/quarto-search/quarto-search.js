@@ -45,7 +45,7 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
   // highlight matches on the page
   if (query !== null && mainEl) {
     // perform any highlighting
-    highlight(escapeRegExp(query), mainEl);
+    highlight(query, mainEl);
 
     // fix up the URL to remove the q query param
     const replacementUrl = new URL(window.location);
@@ -80,20 +80,23 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
   // the media query since we generate different HTML for sidebar overlays than we do
   // for sidebar input UI)
   const detachedMediaQuery =
-    quartoSearchOptions.type === "overlay" ? "all" : "(max-width: 991px)";
+    quartoSearchOptions.type === "overlay"
+      ? "all"
+      : quartoSearchOptions.location === "navbar"
+      ? "(max-width: 991px)"
+      : "none";
 
   // If configured, include the analytics client to send insights
   const plugins = configurePlugins(quartoSearchOptions);
 
   let lastState = null;
-  const { setIsOpen, setQuery, setCollections } = autocomplete({
+  const { setIsOpen } = autocomplete({
     container: searchEl,
     detachedMediaQuery: detachedMediaQuery,
     defaultActiveItemId: 0,
     panelContainer: "#quarto-search-results",
     panelPlacement: quartoSearchOptions["panel-placement"],
     debug: false,
-    openOnFocus: true,
     plugins,
     classNames: {
       form: "d-flex",
@@ -140,20 +143,12 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
           items.forEach((item) => {
             const hrefParts = item.href.split("#");
             const baseHref = hrefParts[0];
-            const isDocumentItem = hrefParts.length === 1;
 
             const items = groupedItems.get(baseHref);
             if (!items) {
               groupedItems.set(baseHref, [item]);
             } else {
-              // If the href for this item matches the document
-              // exactly, place this item first as it is the item that represents
-              // the document itself
-              if (isDocumentItem) {
-                items.unshift(item);
-              } else {
-                items.push(item);
-              }
+              items.push(item);
               groupedItems.set(baseHref, items);
             }
           });
@@ -277,10 +272,6 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
             }
           },
           getItems({ query }) {
-            if (query === null || query === "") {
-              return [];
-            }
-
             const limit = quartoSearchOptions.limit;
             if (quartoSearchOptions.algolia) {
               return algoliaSearch(query, limit, quartoSearchOptions.algolia);
@@ -300,15 +291,9 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
           },
           templates: {
             noResults({ createElement }) {
-              const hasQuery = lastState.query;
-
               return createElement(
                 "div",
-                {
-                  class: `quarto-search-no-results${
-                    hasQuery ? "" : " no-query"
-                  }`,
-                },
+                { class: "quarto-search-no-results" },
                 language["search-no-results-text"]
               );
             },
@@ -367,12 +352,6 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
       ];
     },
   });
-
-  window.quartoOpenSearch = () => {
-    setIsOpen(false);
-    setIsOpen(true);
-    focusSearchInput();
-  };
 
   // Remove the labeleledby attribute since it is pointing
   // to a non-existent label
@@ -760,15 +739,10 @@ function createDocumentCard(createElement, icon, title, section, text, href) {
     containerEl
   );
 
-  const classes = ["search-result-doc", "search-item"];
-  if (!section) {
-    classes.push("document-selectable");
-  }
-
   return createElement(
     "div",
     {
-      class: classes.join(" "),
+      class: "search-result-doc search-item",
     },
     linkEl
   );
@@ -889,25 +863,17 @@ function highlightMatch(query, text) {
   if (text) {
     const start = text.toLowerCase().indexOf(query.toLowerCase());
     if (start !== -1) {
-      const startMark = "<mark class='search-match'>";
-      const endMark = "</mark>";
-
       const end = start + query.length;
       text =
         text.slice(0, start) +
-        startMark +
+        "<mark class='search-match'>" +
         text.slice(start, end) +
-        endMark +
+        "</mark>" +
         text.slice(end);
-      const startInfo = clipStart(text, start);
-      const endInfo = clipEnd(
-        text,
-        startInfo.position + startMark.length + endMark.length
-      );
-      text =
-        startInfo.prefix +
-        text.slice(startInfo.position, endInfo.position) +
-        endInfo.suffix;
+      const clipStart = Math.max(start - 50, 0);
+      const clipEnd = clipStart + 200;
+
+      text = text.slice(clipStart, clipEnd);
 
       return text;
     } else {
@@ -916,59 +882,6 @@ function highlightMatch(query, text) {
   } else {
     return text;
   }
-}
-
-function clipStart(text, pos) {
-  const clipStart = pos - 50;
-  if (clipStart < 0) {
-    // This will just return the start of the string
-    return {
-      position: 0,
-      prefix: "",
-    };
-  } else {
-    // We're clipping before the start of the string, walk backwards to the first space.
-    const spacePos = findSpace(text, pos, -1);
-    return {
-      position: spacePos.position,
-      prefix: "",
-    };
-  }
-}
-
-function clipEnd(text, pos) {
-  const clipEnd = pos + 200;
-  if (clipEnd > text.length) {
-    return {
-      position: text.length,
-      suffix: "",
-    };
-  } else {
-    const spacePos = findSpace(text, clipEnd, 1);
-    return {
-      position: spacePos.position,
-      suffix: spacePos.clipped ? "…" : "",
-    };
-  }
-}
-
-function findSpace(text, start, step) {
-  let stepPos = start;
-  while (stepPos > -1 && stepPos < text.length) {
-    const char = text[stepPos];
-    if (char === " " || char === "," || char === ":") {
-      return {
-        position: step === 1 ? stepPos : stepPos - step,
-        clipped: stepPos > 1 && stepPos < text.length,
-      };
-    }
-    stepPos = stepPos + step;
-  }
-
-  return {
-    position: stepPos - step,
-    clipped: false,
-  };
 }
 
 // removes highlighting as implemented by the mark tag
@@ -987,10 +900,6 @@ function clearHighlight(searchterm, el) {
       }
     }
   }
-}
-
-function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
 }
 
 // highlight matches
