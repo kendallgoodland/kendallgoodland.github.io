@@ -1,0 +1,21 @@
+---
+title: "Data Privacy in the Age of Social Media: An Analysis of Current Legislation"
+date: 2025-08-07
+author:
+  - name: Kendall Goodland
+    orcid: 0000-0000-0000-0000   # optional
+categories: [Politics, Policy]
+description: "When it comes to moving forward in the age of digital innovation, many consumers find themselves in an awkward position."
+link-citations: true
+format:
+  html:
+    number-sections: false
+---
+
+*When it comes to moving forward in the age of digital innovation, many consumers find themselves in an awkward position. Currently, the balance between data privacy and media usage does not exist at all. Media companies have access to all kinds of information about their users, and millions of these users are none the wiser. We are now faced with a crisis: we must allow for the law and public data literacy to catch up with this innovation. Many consumers worry about their own privacy online, and it is up to policymakers and innovators to work together and strike a balance.*
+
+## **A Brief History of Digital Media Legislation**
+
+It’s becoming apparent to many that our laws are not caught up with the abilities that private companies possess to store and distribute their data. However, policymakers can go neck-and-neck in this race. One of the most well-known active pieces of legislation involving online content is Section 230 of the Communications Decency Act delivered in 1996. This legislation
+
+

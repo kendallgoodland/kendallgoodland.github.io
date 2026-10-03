@@ -1,0 +1,77 @@
+project:
+  type: website
+
+website:
+  title: "Kendall Goodland"
+  navbar:
+    left:
+      - text: Blog
+        href: blog/index.qmd
+      - href: index.qmd
+        text: Home
+      - about.qmd
+      - href: "KendallGoodland_CV261.pdf"
+        text: Curriculum Vitae
+      - text: Research Projects
+        menu:
+          - text: "Does the Introduction of TX SB17 Decrease Positive Attitudes in UTD Undergraduate Students Regarding Student Success?"
+            href: "papers/Group_Project_EPPS6302.pdf"
+          - text: "Sustainability of Methane Emissions Research"
+            href: "papers/Goodland_K_Workshop5.pdf"
+          - text: "Does Gamified Critical Thinking Training Increase the Ability of College Students to Identify Fake Political News Articles on Facebook?"
+            href: "papers/Braxton_Goodland_Taylor_ProjectReport.pdf"
+          - text: "Fake News and Social Networks: How Network Contacts Affect the Belief of Disinformation within Social Groups"
+            href: "papers/kendallG_FinalPaper_PSCI7381.pdf"
+          - text: "Voter Turnout Rates In Presidential Elections by State: An Application"
+            href: "papers/VoterTurnoutRatesinUSPresRaces_App.ipynb"
+          - text: "The	Work	Well	Program: An Evaluation	Design	Proposal"
+            href: "papers/Goodland_K_EvaluationDesignProposal.pdf"
+          
+      
+
+        
+  sidebar:
+    contents:
+      - section: "Knowledge Mining"
+        contents:
+        - href: "Final Project KM.pdf"
+          text: Final Project
+      - section: "Data Visualization"
+        contents: 
+        - href: "Assignment5Code.R"
+          text: Assignment 5
+        - href: https://kendallgoodland.shinyapps.io/Assignment6App/
+          text: Shiny App Assignment 6
+        - href: https://mason-womble.shinyapps.io/Hackathon2/
+          text: Assignment 7 Hackathon 2
+        - href: https://mason-womble.shinyapps.io/DataVis_FinalProject/
+          text: Economy and Elections Research App
+        - href: "Womble_FinalProject_6356.pdf"
+          text: Economy and Elections Research Paper
+        - href: "Womble_DataVis_Final_Presentation.pptx"
+          text: "Final Project Presentation"
+      - section: "Survey Research"
+        contents:
+        - href: "Workshop1_SurRes.pdf"
+          text: "Workshop 1: Research Topics"
+      - section: "Political Economy of Tech"
+        contents:
+        - href: "KG_Presentation1_PPPE6V81.pdf"
+          text: AI in Japan Presentation
+        - href: "ResearchProposal_PETEA.pdf"
+          text: Research Proposal
+        - href: "ResearchPres_PPPE6V81.pdf"
+          text: Proposal Presentation
+        - href: "KendallGoodland_Presentation2.pdf"
+          text: Huawei Patents Presentation
+
+          
+    
+format:
+  html:
+    theme: darkly
+    css: styles.css
+    toc: true
+
+editor: visual
+

@@ -1,0 +1,12 @@
+---
+title: "Kendall Goodland"
+---
+
+## Welcome to my website!
+
+```{r}
+```
+
+![](images/Kendall%204%201.jpg){width="700"}
+
+Social Data Analytics & Research Graduate Student

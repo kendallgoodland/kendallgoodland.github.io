@@ -1,0 +1,12 @@
+---
+title: "Blog"
+listing:
+  contents: .
+  sort: "date desc"
+  type: default
+  categories: true          # auto-makes category pages
+  feed: true                # generates RSS
+  fields: [image, title, date, categories, description]  # controls cards
+---
+
+Welcome! I write about politics, policy analysis, and global systems—data-driven takes with critical analysis.
